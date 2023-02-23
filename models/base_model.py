@@ -2,6 +2,7 @@
 """This file constains a Base model called BaseModel"""
 from datetime import datetime
 import uuid
+import models
 
 class BaseModel:
     """Base class for all models"""
@@ -24,6 +25,8 @@ class BaseModel:
                 else:
                     if key != "__class__":
                         setattr(self, key, value)
+        else:
+            models.storage.new(self)
 
 
     def __str__(self):
@@ -33,6 +36,7 @@ class BaseModel:
     def save(self):
         """Save method for saving object instances"""
         self.updated_at = datetime.now()
+        models.storage.save()
 
     def to_dict(self):
         """Return object instance attributes as dict"""
