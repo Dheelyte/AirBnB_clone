@@ -11,18 +11,16 @@ class FileStorage:
         __file_path: the path of the JSON file
         __objects: a dictionary of all objects
     """
-
-    def __init__(self):
-        self.__file_path = "file.json"
-        self.__objects = {}
+    __file_path = "file.json"
+    __objects = {}
 
     def all(self):
         """Returns a dictionary of all objects"""
-        return self.__objects
+        return FileStorage.__objects
 
     def new(self, obj):
         """sets in __objects the obj with key <obj class name>.id"""
-        self.__objects[f"{self.__class__.__name__}.{obj.id}"] = obj
+        FileStorage.__objects[f"{obj.__class__.__name__}.{obj.id}"] = obj
 
     def save(self):
         """serializes __objects to the JSON file (path: __file_path)
@@ -30,12 +28,10 @@ class FileStorage:
             Open the dictionary in write mode
             dump the dictionary in the file f
         """
-        dictionary = {}
-        with open(self.__file_path, 'w') as f:
-            for obj in self.__objects.values():
-                key = obj.__class__.__name__ + "." + obj.id
-                dictionary[key] = obj.to_dict()
-            json.dump(dictionary, f)
+        objects = FileStorage.__objects
+        objdict = {obj: objects[obj].to_dict() for obj in objects.keys()}
+        with open(FileStorage.__file_path, 'w') as f:
+            json.dump(objdict, f)
 
     def reload(self):
         """deserializes the JSON file to __objects
@@ -45,7 +41,7 @@ class FileStorage:
             Open in read mode"
             load the file f and read it"""
         try:
-            with open(self.__file_path, 'r') as f:
+            with open(FileStorage.__file_path, 'r') as f:
                 my_dict = json.load(f)
             for key, value in my_dict.items():
                 """this for loop utilise a key value pair to run
