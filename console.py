@@ -59,8 +59,11 @@ class HBNBCommand(cmd.Cmd):
         objects = storage.all()
         if len(arg) > 0 and arg[0] not in HBNBCommand.classes:
             print("** class doesn't exist **")
-        else:
+        elif len(arg) == 0:
             print([obj.__str__() for obj in objects.values()])
+        else:
+            print([obj.__str__() for obj in objects.values()
+                if obj.__class__.__name__ == arg[0]]) 
 
     def do_update(self, line):
         arg = parse(line)
