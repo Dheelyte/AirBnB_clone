@@ -7,7 +7,7 @@ from models import storage
 
 class HBNBCommand(cmd.Cmd):
     prompt = "(hbnb) "
-    
+
     classes = ["BaseModel"]
 
     def do_create(self, line):
@@ -20,7 +20,6 @@ class HBNBCommand(cmd.Cmd):
             new = eval(f"{line}()")
             print(new.id)
             storage.save()
-            
 
     def do_show(self, line):
         arg = parse(line)
@@ -59,6 +58,27 @@ class HBNBCommand(cmd.Cmd):
         else:
             print([obj.__str__() for obj in objects.values()])
 
+    def do_update(self, line):
+        arg = parse(line)
+        objects = storage.all()
+        if len(arg) == 0:
+            print("** class name missing **")
+        elif len(arg) > 0 and arg[0] not in HBNBCommand.classes:
+            print("** class doesn't exist **")
+        elif len(arg) == 1:
+            print("** instance id missing **")
+        elif len(arg) > 1 and "{}.{}".format(arg[0], arg[1]) not in objects:
+            print("** no instance found **")
+        elif len(arg) == 2:
+            print("** attribute name missing **")
+        elif len(arg) == 3:
+            print("** value missing **")
+        else:
+            obj = objects["{}.{}".format(arg[0], arg[1])]
+            obj.__dict__[arg[2]] = arg[3]
+            storage.save()
+
+
     def do_quit(self, line):
         return True
 
@@ -73,6 +93,7 @@ class HBNBCommand(cmd.Cmd):
 
     def emptyline(self):
         pass
+
 
 def parse(arg):
     # Convert line argument(s) to a tuple
