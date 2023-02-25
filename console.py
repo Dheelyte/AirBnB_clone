@@ -2,13 +2,17 @@
 """ contains the entry point of the command interpreter"""
 import cmd
 from models.base_model import BaseModel
+from models.user import User
 from models import storage
 
 
 class HBNBCommand(cmd.Cmd):
     prompt = "(hbnb) "
 
-    classes = ["BaseModel"]
+    classes = [
+            "BaseModel",
+            "User"
+    ]
 
     def do_create(self, line):
         arg = parse(line)
