@@ -54,7 +54,7 @@ class HBNBCommand(cmd.Cmd):
     def do_all(self, line):
         arg = parse(line)
         objects = storage.all()
-        if len(arg) == 0:
+        if len(arg) > 0 and arg[0] not in HBNBCommand.classes:
             print("** class doesn't exist **")
         else:
             print([obj.__str__() for obj in objects.values()])
