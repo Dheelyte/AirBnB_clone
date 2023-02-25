@@ -51,6 +51,14 @@ class HBNBCommand(cmd.Cmd):
             del objects["{}.{}".format(arg[0], arg[1])]
             storage.save()
 
+    def do_all(self, line):
+        arg = parse(line)
+        objects = storage.all()
+        if len(arg) == 0:
+            print("** class doesn't exist **")
+        else:
+            print([obj.__str__() for obj in objects.values()])
+
     def do_quit(self, line):
         return True
 
