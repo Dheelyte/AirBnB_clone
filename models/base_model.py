@@ -26,8 +26,7 @@ class BaseModel:
                     self.updated_at = datetime.strptime(value,
                                                         '%Y-%m-%dT%H:%M:%S.%f')
                 else:
-                    if key != "__class__":
-                        setattr(self, key, value)
+                    self.__dict__[key] = value
         else:
             models.storage.new(self)
 

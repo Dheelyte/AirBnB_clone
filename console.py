@@ -21,7 +21,7 @@ class HBNBCommand(cmd.Cmd):
         elif arg[0] not in HBNBCommand.classes:
             print("** class doesn't exist **")
         else:
-            new = eval(f"{line}()")
+            new = eval(f"{arg[0]}()")
             print(new.id)
             storage.save()
 
