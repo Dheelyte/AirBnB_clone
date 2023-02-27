@@ -115,13 +115,15 @@ class HBNBCommand(cmd.Cmd):
             obj.__dict__[arg[2]] = arg[3]
             storage.save()
             
-    def do_count(self, arg):
+    def do_count(self, line):
         """Usage: count <class> or <class>.count()
         Retrieve the number of instances of a given class."""
-        argl = parse(arg)
+        arg = parse(line)
         count = 0
         for obj in storage.all().values():
-            if argl[0] == obj.__class__.__name__:
+            if len(arg) == 0:
+                count += 1
+            elif arg[0] == obj.__class__.__name__:
                 count += 1
         print(count)
 
