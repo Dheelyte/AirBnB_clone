@@ -97,23 +97,44 @@ class HBNBCommand(cmd.Cmd):
 
     def do_update(self, line):
         arg = parse(line)
+        print(arg)
         objects = storage.all()
         if len(arg) == 0:
             print("** class name missing **")
+            return
         elif len(arg) > 0 and arg[0] not in HBNBCommand.classes:
             print("** class doesn't exist **")
+            return
         elif len(arg) == 1:
             print("** instance id missing **")
+            return
         elif len(arg) > 1 and "{}.{}".format(arg[0], arg[1]) not in objects:
             print("** no instance found **")
+            return
         elif len(arg) == 2:
             print("** attribute name missing **")
+            return
         elif len(arg) == 3:
             print("** value missing **")
+            return
         else:
-            obj = objects["{}.{}".format(arg[0], arg[1])]
-            obj.__dict__[arg[2]] = arg[3]
-            storage.save()
+            if type(eval(arg[2])) == dict:
+                obj = objdict["{}.{}".format(arg[0], arg[1])]
+                for k, v in eval(arg[2]).items():
+                    if (k in obj.__class__.__dict__.keys() and
+                            type(obj.__class__.__dict__[k]) in {str, int, float}):
+                        valtype = type(obj.__class__.__dict__[k])
+                        obj.__dict__[k] = valtype(v)
+                    else:
+                        obj.__dict__[k] = valtype(v)
+            else:
+                obj = objdict["{}.{}".format(arg[0], arg[1])]
+                if arg[2] in obj.__class__.__dict__.keys():
+                    valtype = type(obj.__class__.__dict__[arg[2]])
+                    obj.__dict__[arg[2]] = valtype(arg[3])
+                else:
+                    obj.__dict__[arg[2]] = arg[3]
+        storage.save()
             
     def do_count(self, line):
         """Usage: count <class> or <class>.count()
